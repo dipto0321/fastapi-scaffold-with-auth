@@ -133,3 +133,4 @@ dmypy.json
 # Project specific
 *.db
 app.db
+uv.lock

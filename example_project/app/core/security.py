@@ -1,14 +1,17 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
+import jwt
 from app.core.config import settings
-from jose import JWTError, jwt
-from passlib.context import CryptContext
+from jwt.exceptions import InvalidTokenError
+from pwdlib import PasswordHash
+from pwdlib.hashers.argon2 import Argon2Hasher
 from pydantic import BaseModel
 
-# Password hashing context
-pwd_context = CryptContext(schemes=["argon2"])
-
+# Password hashing with Argon2
+pwd_hash = PasswordHash((
+    Argon2Hasher(),
+))
 
 class TokenData(BaseModel):
     """Token payload data."""
@@ -18,12 +21,12 @@ class TokenData(BaseModel):
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a plain password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    return pwd_hash.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
     """Hash a password using Argon2."""
-    return pwd_context.hash(password)
+    return pwd_hash.hash(password)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
@@ -54,11 +57,11 @@ def decode_token(token: str) -> Optional[TokenData]:
     """Decode and validate a JWT token."""
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
-        email: str = payload.get("sub")
-        if email is None:
+        email: str | None = payload.get("sub")
+        if not isinstance(email, str):
             return None
         token_data = TokenData(email=email)
-    except JWTError:
+    except InvalidTokenError:
         return None
     return token_data
 

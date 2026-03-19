@@ -90,4 +90,5 @@ disallow_untyped_defs = false
 [tool.pytest.ini_options]
 minversion = "7.0"
 addopts = "-ra -q --strict-markers"
-testpaths = ["tests"]
+pythonpath = ["example_project"]
+testpaths = ["../tests"]
