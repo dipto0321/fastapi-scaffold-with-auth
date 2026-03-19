@@ -1,0 +1,22 @@
+// GitHub repository metadata
+{
+	"name": "fastapi-scaffold-with-auth",
+	"description": "Production-ready FastAPI template with authentication, migrations, rate limiting, and logging",
+	"topics": [
+		"fastapi",
+		"template",
+		"python",
+		"jwt-auth",
+		"sqlmodel",
+		"alembic",
+		"rate-limiting"
+	],
+	"homepage": "https://github.com/dipto0321/fastapi-scaffold-with-auth",
+	"private": false,
+	"has_issues": true,
+	"has_projects": true,
+	"has_downloads": true,
+	"has_wiki": false,
+	"is_template": true,
+	"license": "MIT"
+}
